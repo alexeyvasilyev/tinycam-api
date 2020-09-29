@@ -16,7 +16,8 @@ https://admin:mypassword@192.168.0.3:8083/axis-cgi/mjpg/video.cgi
 
 GET parameters `user=<string>&pwd=<string>`
 
-where `user` - username (optional), `pwd` - password (optional).
+* `user` (optional) - username,
+* `pwd` (optional) - password.
 
 Use it when there is no way to use basic authentication (e.g. for home automation).
 
@@ -69,7 +70,7 @@ GET `/api/v1/get_cam_list?token=<string>`
 
 Example:
 ```
-https://192.168.0.3:8083/api/v1/get_cam_lis?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022
+https://192.168.0.3:8083/api/v1/get_cam_list?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022
 ```
 
 JSON payload:
@@ -89,6 +90,48 @@ JSON payload:
 		"ptzCapabilities": 32768,
 		"audioListening": true,
 		"cloudAccess": true
+	}]
+}
+```
+
+
+## Get camera event list
+
+GET `/api/v1/get_cam_event_list?token=<string>&cameraId=<number>&endtime=<number>&count=<number>&type=<string>&motion=<string>`
+* `cameraId` (mandatory) - camera ID returned by `/api/v1/get_cam_list` request
+* `endtime` (optional) - time from which events should be started
+* `count` (optional) - max number of events to get
+* `type` (optional) - `local` or `cloud` events
+* `motion` (optional) - can be `face`, `person`, `vehicle`, `pet`, `motion`, or `audio`.
+
+List is returned in descending order (new events first).
+
+Example:
+```
+ https://10.0.1.90:8083/api/v1/get_cam_event_list?token=bfd8dfee711a656207dc5c4cc61c97afba6c8108&cameraId=182399567&endtime=-1&count=15&type=local&motion=
+```
+
+JSON payload:
+```
+{
+	"data": [{
+		"time": 1601381164000,
+		"duration": 120000,
+		"motion": "motion",
+		"video": "\/api\/v1\/get_file?file=\/Front%20yard\/2020-09-29%2015.06.04%20120sec%20motion.mp4",
+		"image": "\/api\/v1\/get_file?file=\/Front%20yard\/2020-09-29%2015.06.04%20120sec%20motion.mp4.jpg"
+	}, {
+		"time": 1601380363000,
+		"duration": 58000,
+		"motion": "motion",
+		"video": "\/api\/v1\/get_file?file=\/Front%20yard\/2020-09-29%2014.52.43%2058sec%20motion.mp4",
+		"image": "\/api\/v1\/get_file?file=\/Front%20yard\/2020-09-29%2014.52.43%2058sec%20motion.mp4.jpg"
+	}, {
+		"time": 1601379016000,
+		"duration": 54000,
+		"motion": "motion",
+		"video": "\/api\/v1\/get_file?file=\/Front%20yard\/2020-09-29%2014.30.16%2054sec%20motion.mp4",
+		"image": "\/api\/v1\/get_file?file=\/Front%20yard\/2020-09-29%2014.30.16%2054sec%20motion.mp4.jpg"
 	}]
 }
 ```
