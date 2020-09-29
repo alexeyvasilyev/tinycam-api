@@ -1,6 +1,6 @@
 # tinyCam Monitor PRO web server API
 This is official documentation of the REST API provided by <a href="https://tinycammonitor.com/">tinyCam Monitor PRO</a> web server - Android app for video surveillance.
-tinyCam web server uses API which is partially compatible with <a href="https://www.axis.com/files/manuals/HTTP_API_VAPIX_2.pdf">Axis IP cameras</a>. You can use any IP camera viewer software to view tinyCam server remotely.
+tinyCam web server uses API which is partially compatible with <a href="https://www.axis.com/vapix-library">Axis IP cameras</a>. You can use any IP camera viewer software to view tinyCam server remotely.
 
 ## Authentication
 tinyCam supports three types of authentication:
@@ -108,7 +108,7 @@ List is returned in descending order (new events first).
 
 Example:
 ```
- https://10.0.1.90:8083/api/v1/get_cam_event_list?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022&cameraId=182399567&endtime=1601381164000&count=15&type=local&motion=person
+ https://192.168.0.3/api/v1/get_cam_event_list?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022&cameraId=182399567&endtime=1601381164000&count=15&type=local&motion=person
 ```
 
 JSON payload:
@@ -136,3 +136,13 @@ JSON payload:
 }
 ```
 
+## Get file
+
+GET `/api/v1/get_file?token=<string>&file=<string>`
+
+* `file` (mandatory) - filename returned by `/api/v1/get_cam_event_list` to be requested (image or video)
+
+Example:
+```
+https://192.168.0.3/api/v1/get_file?file=/Front%20yard/2020-09-29%2010.51.26%2043sec%20motion.mp4.jpg&token=d6bdc406225bf6bb6ecf720e97e8927acfe52022
+```
