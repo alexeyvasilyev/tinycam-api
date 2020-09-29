@@ -146,3 +146,66 @@ Example:
 ```
 https://192.168.0.3/api/v1/get_file?file=/Front%20yard/2020-09-29%2010.51.26%2043sec%20motion.mp4.jpg&token=d6bdc406225bf6bb6ecf720e97e8927acfe52022
 ```
+
+## Get status
+
+GET `/api/v1/get_status?token=<string>&cameraId=<number>`
+
+* `cameraId` (optional) - camera ID returned by `/api/v1/get_cam_list` request. If empty, global status returned.
+
+Example:
+```
+https://192.168.0.3/api/v1/get_status?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022
+https://192.168.0.3/api/v1/get_status?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022&cameraId=182399567
+```
+
+Global JSON payload:
+```
+{
+	"data": {
+		"backgroundMode": true,
+		"cpuUsagePercents": 0,
+		"cpuFrequencyMhz": 2014,
+		"temperature": -1,
+		"memoryAvailable": 1089949696,
+		"memoryUsed": 490082304,
+		"threadsUsed": 73,
+		"threadsRunnableUsed": 20,
+		"processes": [{
+			"name": "UI",
+			"memoryUsed": 38047744
+		}, {
+			"name": "Watchdog",
+			"memoryUsed": 29640704
+		}, {
+			"name": "WebServer",
+			"memoryUsed": 231104512
+		}, {
+			"name": "Background",
+			"memoryUsed": 193558528
+		}],
+		"batteryLevel": 100,
+		"batteryStatus": "charging",
+		"uptime": 23160200,
+		"networkInBps": 76103,
+		"networkOutBps": 0,
+		"streamProfile": 0,
+		"powerSafeMode": false,
+		"notifications": true,
+		"rootAvailable": false,
+		"spaceUsed": 4094579744,
+		"spaceAvailable": 1849597952,
+		"liveConnections": 1,
+		"motionCameras": ["Front yard"]
+	}
+}
+```
+
+Camera JSON payload:
+```
+{
+	"data": {
+		"motion": true
+	}
+}
+```
