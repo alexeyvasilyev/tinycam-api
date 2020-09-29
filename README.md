@@ -1,4 +1,4 @@
-# tinyCam Monitor PRO web server API
+# tinyCam app web server API
 This is official documentation of the REST API provided by <a href="https://tinycammonitor.com/">tinyCam Monitor PRO</a> web server - Android app for video surveillance.
 tinyCam web server uses API which is partially compatible with <a href="https://www.axis.com/vapix-library">Axis IP cameras</a>. You can use any IP camera viewer software to view tinyCam server remotely.
 
