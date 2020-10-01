@@ -97,18 +97,18 @@ JSON payload:
 
 ## Get camera event list
 
-GET `/api/v1/get_cam_event_list?token=<string>&cameraId=<number>&endtime=<number>&count=<number>&type=<string>&motion=<string>`
+GET `/api/v1/get_cam_event_list?token=<string>&cameraId=<number>&endtime=<number>&count=<number>&type=<string>&filter=<string>`
 * `cameraId` (mandatory) - camera ID returned by `/api/v1/get_cam_list` request
 * `endtime` (optional) - time (Unix timestamp in milliseconds) from which events should be returned
 * `count` (optional) - max number of events to get
 * `type` (optional) - `local` (default) or `cloud` events
-* `motion` (optional) - can be `face`, `person`, `vehicle`, `pet`, `motion`, or `audio`. If empty, all events returned.
+* `filter` (optional) - can be `pin`, `face`, `person`, `vehicle`, `pet`, `motion`, or `audio`. If empty, all events returned.
 
 List is returned in descending order (new events first).
 
 Example:
 ```
- https://192.168.0.3/api/v1/get_cam_event_list?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022&cameraId=182399567&endtime=1601381164000&count=15&type=local&motion=person
+ https://192.168.0.3/api/v1/get_cam_event_list?token=d6bdc406225bf6bb6ecf720e97e8927acfe52022&cameraId=182399567&endtime=1601381164000&count=15&type=local&filter=person
 ```
 
 JSON payload:
