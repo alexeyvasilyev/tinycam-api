@@ -292,7 +292,7 @@ Access: admin.
 
 The `root.BackgroundMode` parameter is used to switch on/off background mode in tinyCam Monitor.
 
-GET `http://<servername>/param.cgi?action=update&root.BackgroundMode=<string>`
+GET `/param.cgi?action=update&root.BackgroundMode=<string>`
 
 Parameters:
 * `root.BackgroundMode=<string>` (mandatory) - can be `on` or `off`.
@@ -309,7 +309,7 @@ Access: admin
 
 The `root.StreamProfile` parameter is used to change stream profile in tinyCam Monitor.
 
-GET `http://<servername>/param.cgi?action=update&root.StreamProfile=<string>`
+GET `/param.cgi?action=update&root.StreamProfile=<string>`
 
 Parameters:
 * `root.StreamProfile=<string>` (mandatory) - can be `main`, `sub` or `auto`.
@@ -326,7 +326,7 @@ Access: admin
 
 The `root.Notifications` parameter is used to switch on/off notifications in tinyCam Monitor.
 
-GET `http://<servername>/param.cgi?action=update&root.Notifications=<string>[&tag=<string>]`
+GET `/param.cgi?action=update&root.Notifications=<string>[&tag=<string>]`
 
 Parameters:
 * `root.Notifications=<string>` (mandatory) - can be `on` or `off`.
@@ -346,7 +346,7 @@ Access: admin only
 
 The `root.PowerSafeMode` parameter is used to switch on/off power safe mode in tinyCam Monitor.
 
-GET `http://<servername>/param.cgi?action=update&root.PowerSafeMode=<string>`
+GET `/param.cgi?action=update&root.PowerSafeMode=<string>`
 
 Parameters:
 * `root.PowerSafeMode=<string>` (mandatory) - can be `on` or `off`.
@@ -361,14 +361,12 @@ http://192.168.0.3:8083/param.cgi?action=update&root.PowerSafeMode=off
 ## Delete file
 Access: admin 
 
-GET `http://<servername>/param.cgi?action=delete&root.Filename=<string>`
-
 `action=delete` with `root.Filename` parameter used to delete recorded MP4 or JPEG files in tinyCam Monitor.
 
+GET `/param.cgi?action=delete&root.Filename=<string>`
 
 Parameters:
 * `root.Filename=<string>` (mandatory) - filename.
-
 
 Examples:
 ```
@@ -380,7 +378,7 @@ Access: admin
 
 `action=pin` with `root.Filename` parameter used to pin recorded MP4 or JPEG files in tinyCam Monitor.
 
-GET `http://<servername>/param.cgi?action=pin&root.Filename=<string>`
+GET `/param.cgi?action=pin&root.Filename=<string>`
 
 Parameters:
 * `root.Filename=<string>` (mandatory) - filename.
@@ -407,7 +405,7 @@ http://192.168.0.3:8083/param.cgi?action=unpin&root.Filename=/IPV68P2P/2016-10-2
 ## Reboot Android device
 Access: admin. Root required.
 
-GET `http://<servername>/axis-cgi/admin/restart.cgi`
+GET `/axis-cgi/admin/restart.cgi`
 
 Examples:
 ```
