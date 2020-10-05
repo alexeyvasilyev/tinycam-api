@@ -295,7 +295,7 @@ The `root.BackgroundMode` parameter is used to switch on/off background mode in 
 GET `http://<servername>/param.cgi?action=update&root.BackgroundMode=<string>`
 
 Parameters:
-* root.BackgroundMode=<string> (mandatory) - can be `on` or `off`.
+* `root.BackgroundMode=<string>` (mandatory) - can be `on` or `off`.
 
 
 Examples:
