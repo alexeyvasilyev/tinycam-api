@@ -392,7 +392,8 @@ http://192.168.0.3:8083/param.cgi?action=pin&root.Filename=/IPV68P2P/2016-10-21%
 Access: admin
 
 `action=unpin` with `root.Filename` parameter used to unpin recorded MP4 or JPEG files in tinyCam Monitor.
- `http://<servername>/param.cgi?action=unpin&root.Filename=<string>`
+
+GET `/param.cgi?action=unpin&root.Filename=<string>`
 
 Parameters:
 * `root.Filename=<string>` (mandatory) - filename.
