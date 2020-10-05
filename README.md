@@ -28,6 +28,7 @@ https://192.168.0.3:8083/axis-cgi/mjpg/video.cgi?user=admin&pwd=mypassword
 
 
 ### 3. <b>Token based authentication</b> (recommended to use)
+Access: guest, admin
 
 GET `/api/v1/login?user=<string>&pwd=<string>`
 
@@ -54,6 +55,7 @@ https://192.168.0.3:8083/axis-cgi/mjpg/video.cgi?token=d6bdc406225bf6bb6ecf720e9
 ```
 
 ## Logout
+Access: guest, admin
 
 GET `/api/v1/logout?token=<string>`
 
@@ -65,6 +67,7 @@ https://192.168.0.3:8083/api/v1/logout?token=d6bdc406225bf6bb6ecf720e97e8927acfe
 ```
 
 ## Get camera list
+Access: guest, admin
 
 GET `/api/v1/get_cam_list?token=<string>`
 
@@ -96,6 +99,7 @@ JSON payload:
 
 
 ## Get camera event list
+Access: guest, admin
 
 GET `/api/v1/get_cam_event_list?token=<string>&cameraId=<number>&endtime=<number>&count=<number>&type=<string>&filter=<string>`
 * `cameraId` (optional) - camera ID returned by `/api/v1/get_cam_list` request. If empty, events from all enabled cameras returned.
@@ -148,6 +152,7 @@ https://192.168.0.3/api/v1/get_file?file=/Front%20yard/2020-09-29%2010.51.26%204
 ```
 
 ## Get status
+Access: admin
 
 GET `/api/v1/get_status?token=<string>&cameraId=<number>`
 
@@ -208,4 +213,34 @@ Camera JSON payload:
 		"motion": true
 	}
 }
+```
+
+## Get MJPEG and JPEG video streams
+Access: guest, admin
+
+GET `/axis-cgi/mjpg/video.cgi`
+
+Used to request a Motion JPEG video stream with specified arguments.
+
+GET `/axis-cgi/jpg/image.cgi`
+
+Request for single JPEG.
+
+`http://<servername>/axis-cgi/mjpg/video.cgi[?<argument>=<value>[&<argument>=<value>...]]`
+`http://<servername>/axis-cgi/jpg/image.cgi[?<argument>=<value>[&<argument>=<value>...]]`
+
+Parameters:
+* `camera=<int>` (optional) - select video source. 1..n.
+* `fps=<int>` (optional) - image frame rate. 0 - unlimited.
+* `compression=<int>` (optional) - adjust image compression level. Higher values correspond to higher compression, that is lower quality and smaller image size.
+* `resolution=<string>` (optional) - resolution [width]x[height] of the returned image, e.g. `640x480`.
+
+
+Examples:
+```
+http://192.168.0.3:8083/axis-cgi/mjpg/video.cgi
+http://192.168.0.3:8083/axis-cgi/jpg/image.cgi
+http://192.168.0.3:8083/axis-cgi/mjpg/video.cgi?camera=2&fps=1&compression=80&resolution=320x240
+http://192.168.0.3:8083/axis-cgi/jpg/image.cgi?camera=3&compression=50&resolution=480x640
+http://pastebin.com/NCWWSQxa (matrix 2x2)
 ```
