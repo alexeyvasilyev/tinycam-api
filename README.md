@@ -98,7 +98,7 @@ JSON payload:
 ## Get camera event list
 
 GET `/api/v1/get_cam_event_list?token=<string>&cameraId=<number>&endtime=<number>&count=<number>&type=<string>&filter=<string>`
-* `cameraId` (mandatory) - camera ID returned by `/api/v1/get_cam_list` request
+* `cameraId` (optional) - camera ID returned by `/api/v1/get_cam_list` request. If empty, events from all enabled cameras returned.
 * `endtime` (optional) - time (Unix timestamp in milliseconds) from which events should be returned
 * `count` (optional) - max number of events to get
 * `type` (optional) - `local` (default) or `cloud` events
