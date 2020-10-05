@@ -226,8 +226,10 @@ GET `/axis-cgi/jpg/image.cgi`
 
 Request for single JPEG.
 
-`http://<servername>/axis-cgi/mjpg/video.cgi[?<argument>=<value>[&<argument>=<value>...]]`
-`http://<servername>/axis-cgi/jpg/image.cgi[?<argument>=<value>[&<argument>=<value>...]]`
+```
+http://<servername>/axis-cgi/mjpg/video.cgi[?<argument>=<value>[&<argument>=<value>...]]
+http://<servername>/axis-cgi/jpg/image.cgi[?<argument>=<value>[&<argument>=<value>...]]
+```
 
 Parameters:
 * `camera=<int>` (optional) - select video source. 1..n.
@@ -243,4 +245,44 @@ http://192.168.0.3:8083/axis-cgi/jpg/image.cgi
 http://192.168.0.3:8083/axis-cgi/mjpg/video.cgi?camera=2&fps=1&compression=80&resolution=320x240
 http://192.168.0.3:8083/axis-cgi/jpg/image.cgi?camera=3&compression=50&resolution=480x640
 http://pastebin.com/NCWWSQxa (matrix 2x2)
+```
+
+## Get Audio stream
+Access: admin
+
+GET `/axis-cgi/audio/receive.wav`
+
+is used to request a WAV audio stream with specified arguments.
+ `http://<servername>/axis-cgi/audio/receive.wav[?<argument>=<value>[&<argument>=<value>...]]`
+
+Parameters:
+* `camera=<int>` (optional) - select audio source. 1..n.
+* `cameraId` (optional) - camera ID
+
+Examples:
+```
+http://192.168.0.3:8083/axis-cgi/audio/receive.wav
+http://192.168.0.3:8083/axis-cgi/audio/receive.wav?camera=2
+```
+
+## PTZ control
+Access: admin
+
+GET `/axis-cgi/com/ptz.cgi`
+
+Parameters:
+* `camera=<int>` (optional) - select video source. 1..n.
+* `continuouspantiltmove=<int>,<int>` (optional) - continuous pan/tilt motion. Positive values mean right (pan) and up (tilt), negative values mean left (pan) and down (tilt). "0,0" means stop. Values as <pan speed>,<tilt speed>.
+* `continuouszoommove=<int>` (optional) - continuous zoom motion. Positive values mean zoom in and negative values mean zoom out. "0" means stop.
+* `continuousfocusmmove=<int>` (optional) - continuous focus motion. Positive values focus near and negative values mean focus far. "0" means stop.
+* `continuousirismmove=<int>` (optional) - continuous iris motion. Positive values mean iris open and negative values mean iris close. "0" means stop.
+* `move=home` (optional) - moves home.
+* `gotoserverpresetno=<int>` (optional) - move to the position associated with the specified preset position number. 1..n.
+
+Examples:
+```
+http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?move=home
+http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?camera=2&gotoserverpresetno=3
+http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?continuouspantiltmove=0,0
+http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?continuouspantiltmove=100,-100&continuouszoommove=100
 ```
