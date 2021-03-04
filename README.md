@@ -287,6 +287,22 @@ http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?continuouspantiltmove=0,0
 http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?continuouspantiltmove=100,-100&continuouszoommove=100
 ```
 
+## LED control
+Access: admin
+
+GET `/axis-cgi/io/lightcontrol.cgi`
+
+Parameters:
+* `camera=<int>` (optional) - select video source. 1..n.
+* `action=<string>` (mandatory) - specifies light source and value. Action `L1:-100` - LED on, `L1:-0` - LED off, `L1:-50` - LED auto.
+
+Examples:
+```
+http://192.168.0.3:8083/axis-cgi/io/lightcontrol.cgi?action=L1:-100
+http://192.168.0.3:8083/axis-cgi/io/lightcontrol.cgi?action=L1:-0
+http://192.168.0.3:8083/axis-cgi/io/lightcontrol.cgi?action=L1:-50
+```
+
 ## Background mode
 Access: admin.
 
