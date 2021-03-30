@@ -234,7 +234,7 @@ http://<servername>/axis-cgi/jpg/image.cgi[?<argument>=<value>[&<argument>=<valu
 Parameters:
 * `camera=<int>` (optional) - select video source. 1..n.
 * `fps=<int>` (optional) - image frame rate. 0 - unlimited.
-* `compression=<int>` (optional) - adjust image compression level. Higher values correspond to higher compression, that is lower quality and smaller image size.
+* `compression=<int>` (optional) - adjust image compression level, 0..100. Higher values correspond to higher compression, that is lower quality and smaller image size.
 * `resolution=<string>` (optional) - resolution [width]x[height] of the returned image, e.g. `640x480`.
 
 
