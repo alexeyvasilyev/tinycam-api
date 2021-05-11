@@ -278,11 +278,13 @@ Parameters:
 * `continuousirismmove=<int>` (optional) - continuous iris motion. Positive values mean iris open and negative values mean iris close. "0" means stop.
 * `move=home` (optional) - moves home.
 * `gotoserverpresetno=<int>` (optional) - move to the position associated with the specified preset position number. 1..n.
+* `setserverpresetno=<int>` (optional) - save the current position with the specified preset position number. 1..n.
 
 Examples:
 ```
 http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?move=home
 http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?camera=2&gotoserverpresetno=3
+http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?camera=2&setserverpresetno=2
 http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?continuouspantiltmove=0,0
 http://192.168.0.3:8083/axis-cgi/com/ptz.cgi?continuouspantiltmove=100,-100&continuouszoommove=100
 ```
