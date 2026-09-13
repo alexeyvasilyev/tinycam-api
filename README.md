@@ -247,6 +247,61 @@ http://192.168.0.3:8083/axis-cgi/jpg/image.cgi?camera=3&compression=50&resolutio
 http://pastebin.com/NCWWSQxa (matrix 2x2)
 ```
 
+## Get RTSP streams
+
+Access: guest, admin
+
+The RTSP server starts automatically with the web server and shares its configured port (8083 by default). It supports TCP/UDP/HTTP protocols.
+
+Stream URL:
+
+```text
+rtsp://<servername>:8083/axis-media/media.amp[?<argument>=<value>[&<argument>=<value>...]]
+```
+
+Parameters:
+
+* `camera=<int>` (optional) - select video source. 1..n.
+* `cameraId=<int>` (optional) - camera ID returned by `/api/v1/get_cam_list` request. If empty, events from all enabled cameras returned
+* `user=<string>&pwd=<string>` or `token=<string>` (optional) - authentication as described below.
+
+### Examples
+
+TCP:
+
+```bash
+ffplay -rtsp_transport tcp "rtsp://admin:mypassword@192.168.0.3:8083/axis-media/media.amp?camera=1"
+```
+
+UDP:
+
+```bash
+ffplay -rtsp_transport udp "rtsp://admin:mypassword@192.168.0.3:8083/axis-media/media.amp?camera=1"
+```
+
+
+Direct RTSP over TLS (enable **Use HTTPS**):
+
+```bash
+ffplay -rtsp_transport tcp "rtsps://admin:mypassword@192.168.0.3:8083/axis-media/media.amp?camera=1" -tls_verify 0
+```
+
+For testing with an untrusted or self-signed certificate, add `-tls_verify 0` to disable certificate verification; the connection remains encrypted.
+
+HTTP tunnel (disable **Use HTTPS**):
+
+```bash
+ffplay -rtsp_transport http "rtsp://admin:mypassword@192.168.0.3:8083/axis-media/media.amp?camera=1"
+```
+
+HTTPS tunnel (enable **Use HTTPS**):
+
+```bash
+ffplay -rtsp_transport https "rtsp://admin:mypassword@192.168.0.3:8083/axis-media/media.amp?camera=1" -tls_verify 0
+```
+
+Known client issue: the tested Homebrew ffplay 9.0 build applies `-tls_verify 0` to the HTTPS tunnel's GET connection but still verifies the certificate on its POST connection. With an untrusted certificate, GET can succeed and POST can fail with `certificate verify failed`. Direct RTSPS with `-rtsp_transport tcp -tls_verify 0` works around this tunnel-specific issue; alternatively, use a certificate trusted by the client or a client build that applies TLS options to both tunnel connections.
+
 ## Get Audio stream
 Access: admin
 
