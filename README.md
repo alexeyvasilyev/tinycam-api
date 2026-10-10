@@ -485,3 +485,33 @@ Examples:
 ```
 http://192.168.0.3:8083/axis-cgi/admin/restart.cgi
 ```
+
+# tinyCam deep links
+
+Deep links on tinyCam app allow users to open specific screens or cameras directly within an app instead of navigating manually. They also enable integration with other Android apps, widgets, shortcuts, and automation tools.
+
+Single cameras view:
+
+```
+tinycam://live/camera?name={name}&id={id}&pip=true
+  name=<string> (optional) - camera name
+  id=<int> (optional) - internal camera id
+  pip=<boolean> (optional) - run in Picture-in-Picture mode
+```
+
+ Multiple cameras view:
+```
+ tinycam://live/layout?id=<int>&page=<int>&tag=<string>
+  id=<int> (optional) - internal layout id
+  page=<int> (optional) - page number 1..n
+  tag=<string> (optional) - tag name
+```
+
+Multiple cameras view:
+
+```
+ tinycam://live/layout?id=<int>&page=<int>&tag=<string>
+  id=<int> (optional) - internal layout id
+  page=<int> (optional) - page number 1..n
+  tag=<string> (optional) - tag name
+```
