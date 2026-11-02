@@ -247,6 +247,75 @@ http://192.168.0.3:8083/axis-cgi/jpg/image.cgi?camera=3&compression=50&resolutio
 http://pastebin.com/NCWWSQxa (matrix 2x2)
 ```
 
+## Get MP4 video stream
+Access: guest, admin
+
+GET `/axis-cgi/media.cgi?container=mp4`
+
+Used to request a live progressive (fragmented) MP4 video stream. Compatible with Axis VAPIX "Media stream over HTTP" API. Video is always sent in the camera's original codec (H.264/H.265, no transcoding). Audio is not included.
+
+```
+http://<servername>/axis-cgi/media.cgi?container=mp4[&<argument>=<value>...]
+```
+
+Parameters:
+* `container=mp4` (required) - container format. `mp4` or `mp4mux` (see below) are supported (Axis default `matroska` is not supported).
+* `camera=<int>` (optional) - select video source. 1..n.
+* `cameraId=<int>` (optional) - camera ID returned by `/api/v1/get_cam_list` request.
+
+Other Axis parameters (`videocodec`, `resolution`, `fps`, `compression`, `audio`, etc.) are ignored.
+
+The response `Content-Type` contains the RFC 6381 codecs string needed for Media Source Extensions, e.g. `video/mp4; codecs="avc1.64001F"` or `video/mp4; codecs="hvc1.1.6.L93.B0"`.
+
+The stream is an init segment (`ftyp` + `moov`) followed by one `moof` + `mdat` fragment per video frame. When the camera's video parameters change (e.g. resolution), a new init segment is sent in the same stream and the timeline continues, so it can be appended into the same MSE `SourceBuffer`. The stream is closed only if the video codec changes (H.264 <-> H.265). Clients should reconnect.
+
+Returns `415 Unsupported Media Type` if the camera video codec is not H.264/H.265 (e.g. MJPEG cameras). Use `/axis-cgi/mjpg/video.cgi` instead.
+
+Examples:
+```
+http://192.168.0.3:8083/axis-cgi/media.cgi?container=mp4&camera=2
+ffplay "http://192.168.0.3:8083/axis-cgi/media.cgi?container=mp4&cameraId=1234&token=d6bdc406225bf6bb6ecf720e97e8927acfe52022"
+```
+
+## Get multiple MP4 video streams in a single connection
+Access: guest, admin
+
+GET `/axis-cgi/media.cgi?container=mp4mux`
+
+Used to request live MP4 video streams of several cameras multiplexed into a single HTTP connection, e.g. for multiple cameras layouts. Browsers allow only ~6 simultaneous HTTP/1.1 connections per server, so a separate `container=mp4` stream for each camera is not possible.
+
+```
+http://<servername>/axis-cgi/media.cgi?container=mp4mux&cameraId=<int>[,<int>...]
+```
+
+Parameters:
+* `container=mp4mux` (required)
+* `cameraId=<int>[,<int>...]` (required) - comma separated list of up to 25 camera IDs returned by `/api/v1/get_cam_list` request.
+
+Response `Content-Type` is `application/x-tinycam-mp4-mux`. Body is a sequence of packets:
+
+| Field | Size | Description |
+|---|---|---|
+| type | 1 byte | packet type, see below |
+| stream index | 1 byte | camera position in `cameraId` list, 0..n-1 |
+| payload length | 4 bytes, big endian | |
+| payload | payload length | |
+
+Packet types:
+* `1` INIT - mime type length (2 bytes, big endian), mime type (UTF-8, e.g. `video/mp4; codecs="avc1.64001F"`), fMP4 init segment. Sent again if video parameters changed or video restarted. Client should reset decoder.
+* `2` MEDIA - fMP4 media segment (`moof` + `mdat`) with one frame.
+* `3` ERROR - status (2 bytes, big endian, HTTP status code), message (UTF-8).
+  * `404` - camera not found or disabled. Stream of this camera is finished.
+  * `415` - camera video codec is not H.264/H.265. Stream of this camera is finished. Use JPEG or MJPEG instead.
+  * `503` - no video from camera. Stream continues, INIT is sent when video is available.
+
+Returns `400 Bad Request` if `cameraId` list is invalid.
+
+Example:
+```
+http://192.168.0.3:8083/axis-cgi/media.cgi?container=mp4mux&cameraId=1234,5678,9012&token=d6bdc406225bf6bb6ecf720e97e8927acfe52022
+```
+
 ## Get RTSP streams
 
 Access: guest, admin
