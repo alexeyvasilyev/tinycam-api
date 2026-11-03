@@ -248,11 +248,11 @@ http://pastebin.com/NCWWSQxa (matrix 2x2)
 ```
 
 ## Get MP4 video stream
-Access: guest, admin
+Access: guest, admin (audio: admin)
 
 GET `/axis-cgi/media.cgi?container=mp4`
 
-Used to request a live progressive (fragmented) MP4 video stream. Compatible with Axis VAPIX "Media stream over HTTP" API. Video is always sent in the camera's original codec (H.264/H.265, no transcoding). Audio is not included.
+Used to request a live progressive (fragmented) MP4 video stream. Compatible with Axis VAPIX "Media stream over HTTP" API. Video is always sent in the camera's original codec (H.264/H.265, no transcoding). Audio is included only if requested with `audio=1`.
 
 ```
 http://<servername>/axis-cgi/media.cgi?container=mp4[&<argument>=<value>...]
@@ -262,10 +262,17 @@ Parameters:
 * `container=mp4` (required) - container format. `mp4` or `mp4mux` (see below) are supported (Axis default `matroska` is not supported).
 * `camera=<int>` (optional) - select video source. 1..n.
 * `cameraId=<int>` (optional) - camera ID returned by `/api/v1/get_cam_list` request.
+* `audio=<int>` (optional) - `1` adds camera audio track, `0` (default) - video only. Requires admin access, ignored for guests (video only stream is sent).
 
-Other Axis parameters (`videocodec`, `resolution`, `fps`, `compression`, `audio`, etc.) are ignored.
+Other Axis parameters (`videocodec`, `resolution`, `fps`, `compression`, etc.) are ignored.
 
-The response `Content-Type` contains the RFC 6381 codecs string needed for Media Source Extensions, e.g. `video/mp4; codecs="avc1.64001F"` or `video/mp4; codecs="hvc1.1.6.L93.B0"`.
+The response `Content-Type` contains the RFC 6381 codecs string needed for Media Source Extensions, e.g. `video/mp4; codecs="avc1.64001F"` or `video/mp4; codecs="hvc1.1.6.L93.B0"`. With audio track: `video/mp4; codecs="avc1.64001F, mp4a.40.2"`.
+
+Audio track (`audio=1`):
+* Camera audio (any codec supported by tinyCam, e.g. G.711, AAC, Opus) is decoded and re-encoded to AAC-LC, 48 kHz, mono, 64 kbps, since browsers support only AAC/Opus in MP4.
+* Audio track is always present in the init segment, even if the camera does not send audio. Silence is sent then. Audio gaps are filled with silence as well, so playback is never stalled waiting for audio.
+* Audio and video share the same timeline. Audio fragments (`moof` + `mdat` with one or more AAC frames, 1024 samples each) are interleaved with video fragments.
+* Audio volume, amplification and squelch are the same as for `/axis-cgi/audio/receive.wav`.
 
 The stream is an init segment (`ftyp` + `moov`) followed by one `moof` + `mdat` fragment per video frame. When the camera's video parameters change (e.g. resolution), a new init segment is sent in the same stream and the timeline continues, so it can be appended into the same MSE `SourceBuffer`. The stream is closed only if the video codec changes (H.264 <-> H.265). Clients should reconnect.
 
@@ -275,6 +282,7 @@ Examples:
 ```
 http://192.168.0.3:8083/axis-cgi/media.cgi?container=mp4&camera=2
 ffplay "http://192.168.0.3:8083/axis-cgi/media.cgi?container=mp4&cameraId=1234&token=d6bdc406225bf6bb6ecf720e97e8927acfe52022"
+ffplay "http://192.168.0.3:8083/axis-cgi/media.cgi?container=mp4&cameraId=1234&audio=1&token=d6bdc406225bf6bb6ecf720e97e8927acfe52022"
 ```
 
 ## Get multiple MP4 video streams in a single connection
@@ -291,6 +299,8 @@ http://<servername>/axis-cgi/media.cgi?container=mp4mux&cameraId=<int>[,<int>...
 Parameters:
 * `container=mp4mux` (required)
 * `cameraId=<int>[,<int>...]` (required) - comma separated list of up to 25 camera IDs returned by `/api/v1/get_cam_list` request.
+
+Audio is not supported (`audio` parameter is ignored). Use `container=mp4` for a single camera with audio.
 
 Response `Content-Type` is `application/x-tinycam-mp4-mux`. Body is a sequence of packets:
 
